@@ -1,54 +1,110 @@
 <!doctype html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title> Pokemon </title>
-        <!-- Bootstrap core CSS -->
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
-        <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
-        <script>
-            
-            function attach_handlres(){                
-                for (let j=1; j<=151; j++){
-                    let variable = '<img src="http://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/'+j+'.png">';
-                    $('h1').append(variable);
-                    console.log(variable);
-                }
-                
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title> Pokemon </title>
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    
+    <script>
+        function attach_handlres() {
+            for (let j = 1; j <= 151; j++) {
+                let variable = '<img id="poke' + j + '" src="http://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/' + j + '.png">';
+                $('p').before(variable);
             }
+        }
 
-            $(document).ready(function() {
-                console.log('El documento está listo! ');
-                attach_handlres();
-                });
-/*
-                $('.smooth').click(function() {
-                    console.log('boton Slide down ha sido clickeado');
-                    $(this).fadeOut(1000);
-                });
+        function despliegue() {
 
-                $('#claseRestaurar').click(function() {
-                    console.log('boton Slide down ha sido clickeado');
-                    $('.smooth').fadeIn(1000);
-                }); */
-        </script>
+            $('img').click(function () {
+                console.log('boton Slide down ha sido clickeado');
+                let source = $(this).attr('id');
+                let number = source.replace(/[^0-9]/g, '');
+                console.log(number);
+                $.get("https://pokeapi.co/api/v2/pokemon/" + number + "/", function (res) {
+                    console.log(res);
+                    console.log(res.name);
+                    $('.modal-title').html('<h1 class="center"><b>' + res.name + '</b></h1>');
+                    $('.modal-title').append('<img class="center1" id="poke'+number+'"src="http://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/' + number + '.png">');
+                    $('.modal-body').html('<h2 class="center"><b> Tipo de Pokemon: ' + res.types[0].type.name + '</b></h2>');
+                    $('.modal-footer h1').html('<h2 class="center"><b> La altura es: ' +res.height + '</b></h2> <h2 class="center"><b> El peso es: ' +res.weight + '</b></h2>' );
 
-        <style>
-            body *{
-                outline: 1px solid red;
-                
-            }
-        </style>
-    </head>
+                    console.log(res.types[0].type.name);
+                    console.log(res.weight);
+                    console.log(res.height);
+                    }, "json");
 
-    <body>
-        <div>
-            <h1>Estos son los 151 pokemon</h1>
-            <img src="http://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/1.png">
+                    
+
+                    
+
+
+                $('#myModal').modal('show');
+
+            });
+        }
+        $(document).ready(function () {
+            console.log('El documento está listo! ');
+            attach_handlres();
+            despliegue();
+        });
+                       
+    </script>
+
+    <style>
+        body * {
+            outline: 0px solid red;
             
+
+        }
+
+        .center {
+            text-align: center;
+        }
+
+        .center1 {
+            padding-left: 42%;
+
+        }
+    </style>
+</head>
+
+<body>
+    <div class="col lg-12 center">
+        <h1>Estos son los 151 pokemon</h1>
+    </div>
+
+    <div>
+        <p></p>
+    </div>
+    <div class="container">
+        <!-- Trigger the modal with a button -->
+        <!-- Modal -->
+        <div class="modal fade" id="myModal" role="dialog">
+            <div class="modal-dialog">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Nombre Pokemon</h4>
+                    </div>
+                    <h2 class="modal-body">
+                        
+                    </h2>
+                    <div class="modal-footer">
+                        <h1></h1>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                    </div>
+                </div>
+
+            </div>
         </div>
+    </div>
 
-    </body>
+</body>
+
 </html>
-
